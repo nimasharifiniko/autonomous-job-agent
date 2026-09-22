@@ -1,0 +1,6 @@
+[theme]
+primaryColor = "#0066CC"      # رنگ دکمه‌ها و المان‌های اصلی (آبی لینکدین)
+backgroundColor = "#FFFFFF"   # رنگ پس‌زمینه اصلی (سفید)
+secondaryBackgroundColor = "#F3F6F8" # رنگ پس‌زمینه سایدبار (سفید-آبی خیلی روشن)
+textColor = "#1E293B"         # رنگ متن (خاکستری تیره مایل به آبی)
+font = "sans serif"
