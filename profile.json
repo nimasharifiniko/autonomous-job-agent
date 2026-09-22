@@ -1,0 +1,18 @@
+{
+  "full_name": "Nima Sharifi Niko",
+  "target_role": "Python AI Automation Developer / Backend Engineer",
+  "skills": [
+    "Python",
+    "AI Automation",
+    "OpenAI API",
+    "Ollama & Local LLMs",
+    "Slack Bolt SDK",
+    "FastAPI / REST APIs",
+    "SQLite",
+    "APScheduler",
+    "Git & GitHub",
+    "Streamlit"
+  ],
+  "experience_summary": "Python Developer specializing in building autonomous AI automation systems, real-time event handlers, local LLM integrations, and task scheduling pipelines.",
+  "location_preference": "Remote / Hybrid / Relocation"
+}
