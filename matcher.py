@@ -3,8 +3,10 @@ import json
 from openai import OpenAI
 from dotenv import load_dotenv
 
+# Load environment variables
 load_dotenv()
 
+# Initialize OpenAI client for local Ollama
 base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434/v1")
 model_name = os.getenv("AI_MODEL_NAME", "qwen2.5-coder:7b")
 
@@ -15,12 +17,12 @@ client = OpenAI(
 
 
 def load_user_profile():
-    """Loads user profile from profile.json file."""
+    """Loads candidate profile from profile.json file."""
     try:
         with open("profile.json", "r", encoding="utf-8") as f:
             return json.load(f)
     except Exception as e:
-        print(f"⚠️ Warning: Could not load profile.json: {e}")
+        print(f"[Warning] Could not load profile.json: {e}")
         return {}
 
 
@@ -82,7 +84,7 @@ def evaluate_job_match(job_title: str, job_description: str) -> dict:
         return result
 
     except json.JSONDecodeError:
-        print("⚠️ Failed to parse LLM response as JSON. Returning fallback.")
+        print("[Warning] Failed to parse LLM response as JSON. Returning fallback.")
         return {
             "match_score": 0,
             "summary_reason": "Parsing error from AI model.",
@@ -90,7 +92,7 @@ def evaluate_job_match(job_title: str, job_description: str) -> dict:
             "missing_skills": []
         }
     except Exception as e:
-        print(f"❌ Matcher error: {e}")
+        print(f"[Error] Matcher error: {e}")
         return {
             "match_score": 0,
             "summary_reason": f"System error: {str(e)}",
@@ -99,15 +101,38 @@ def evaluate_job_match(job_title: str, job_description: str) -> dict:
         }
 
 
-# Self-testing script
+# Self-testing script integrating Real API Fetch + AI Matcher
 if __name__ == "__main__":
-    print("🧠 Testing AI Matcher Engine with local Ollama...\n")
+    from job_fetcher import fetch_jobs
 
-    test_title = "Senior Python Developer - FastAPI & AI"
-    test_desc = "We are seeking a Python Engineer skilled in REST APIs, Local LLMs, SQLite, and automation tools."
+    print("🚀 Fetching real jobs from Adzuna API and evaluating with local AI...\n")
 
-    print(f"Testing Job: {test_title}")
-    match_result = evaluate_job_match(test_title, test_desc)
+    # 1. Fetch 3 real job listings
+    raw_jobs = fetch_jobs("Python Developer", results_per_page=3)
 
-    print("\n📊 AI Match Result:")
-    print(json.dumps(match_result, indent=2))
+    if not raw_jobs:
+        print("[Error] No jobs found from API.")
+    else:
+        # 2. Process and match each job
+        for idx, job in enumerate(raw_jobs, start=1):
+            print(f"==================== Job #{idx} ====================")
+            print(f"📌 Title: {job['title']}")
+            print(f"🏢 Company: {job['company']}")
+            print(f"📍 Location: {job['location']}")
+            print("🤖 Running AI Profile Evaluation...")
+
+            # Run AI Evaluation
+            match_data = evaluate_job_match(job["title"], job["description"])
+
+            # Print evaluation details
+            score = match_data.get("match_score", 0)
+            score_emoji = "🟢" if score >= 70 else ("🟡" if score >= 50 else "🔴")
+
+            print(f"\n{score_emoji} Match Score: {score}%")
+            print(f"💬 Reason: {match_data.get('summary_reason')}")
+            print(
+                f"✅ Matching Skills: {', '.join(match_data.get('matching_skills', []))}")
+            print(
+                f"⚠️ Missing Skills: {', '.join(match_data.get('missing_skills', []))}")
+            print(f"🔗 URL: {job['redirect_url']}")
+            print("===================================================\n")
