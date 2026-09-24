@@ -21,7 +21,23 @@ st.markdown("""
     
     /* Sidebar Styling */
     section[data-testid="stSidebar"] { background-color: #0F172A !important; }
-    section[data-testid="stSidebar"] * { color: #F8FAFC !important; }
+    section[data-testid="stSidebar"] h1, 
+    section[data-testid="stSidebar"] h2, 
+    section[data-testid="stSidebar"] h3, 
+    section[data-testid="stSidebar"] label, 
+    section[data-testid="stSidebar"] p { color: #F8FAFC !important; }
+
+    /* Fix Input Box Text Color inside Sidebar */
+    section[data-testid="stSidebar"] div[data-baseweb="input"] input {
+        color: #0F172A !important;
+        background-color: #FFFFFF !important;
+        font-weight: 600 !important;
+    }
+    
+    section[data-testid="stSidebar"] div[data-baseweb="input"] {
+        background-color: #FFFFFF !important;
+        border-radius: 8px !important;
+    }
 
     /* Custom Profile Avatar */
     .avatar-container {
@@ -39,7 +55,7 @@ st.markdown("""
     }
     
     /* Text & Links */
-    .profile-title { text-align: center; font-size: 1.3rem; font-weight: 800; margin-bottom: 2px; }
+    .profile-title { text-align: center; font-size: 1.3rem; font-weight: 800; margin-bottom: 2px; color: #FFFFFF !important; }
     .profile-subtitle { text-align: center; font-size: 0.9rem; color: #94A3B8 !important; margin-bottom: 15px; }
     .social-links { text-align: center; margin-bottom: 20px; }
     .social-links a {
@@ -83,6 +99,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# Initialize Database Table
 init_db()
 
 # Main Header
